@@ -1,4 +1,4 @@
-.....F..F..F
+.....F..F...
 ======================================================================
 FAIL: test_number_arguments (__main__.TestPractica3)
 ----------------------------------------------------------------------
@@ -6,7 +6,7 @@ Traceback (most recent call last):
   File "/home/as/tests_practicas_AS/tests/./test_practica3.py", line 126, in test_number_arguments
     self.child.expect_exact('Numero incorrecto de parametros\r\n')
 pexpect.exceptions.EOF: End Of File (EOF). Exception style platform.
-<pexpect.pty_spawn.spawn object at 0x7f80fc83cfd0>
+<pexpect.pty_spawn.spawn object at 0x7f70664d0fd0>
 command: /usr/bin/sudo
 args: [b'/usr/bin/sudo', b'/bin/bash', b'/home/as/tests_practicas_AS/practica_3/practica_3.sh', b'-a', b'/home/as/tests_practicas_AS/tests/correct_user_list.txt', b'extra_arg']
 buffer (last 100 chars): ''
@@ -16,7 +16,7 @@ match: None
 match_index: None
 exitstatus: None
 flag_eof: True
-pid: 6957
+pid: 9476
 child_fd: 5
 closed: False
 timeout: 30
@@ -45,52 +45,11 @@ FAIL: test_required_commands (__main__.TestPractica3)
 This test checks for required commands and options for useradd
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/home/as/tests_practicas_AS/tests/./test_practica3.py", line 112, in test_required_commands
-    self.assertFalse(required_commands,
-AssertionError: {'usermod'} is not false : The script does not contain all required commands. Missing commands are: usermod
-
-======================================================================
-FAIL: test_sudo (__main__.TestPractica3)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/as/tests_practicas_AS/tests/./test_practica3.py", line 134, in test_sudo
-    self.child.expect_exact('Este script necesita privilegios de administracion')
-pexpect.exceptions.EOF: End Of File (EOF). Exception style platform.
-<pexpect.pty_spawn.spawn object at 0x7f80fc83c970>
-command: /bin/bash
-args: [b'/bin/bash', b'/home/as/tests_practicas_AS/practica_3/practica_3.sh', b'-a', b'/home/as/tests_practicas_AS/tests/correct_user_list.txt']
-buffer (last 100 chars): ''
-before (last 100 chars): 'Este script necesita privilegios de administrador\r\n'
-after: <class 'pexpect.exceptions.EOF'>
-match: None
-match_index: None
-exitstatus: 1
-flag_eof: True
-pid: 7515
-child_fd: 6
-closed: False
-timeout: 30
-delimiter: <class 'pexpect.exceptions.EOF'>
-logfile: None
-logfile_read: None
-logfile_send: None
-maxread: 2000
-ignorecase: False
-searchwindowsize: None
-delaybeforesend: 0.05
-delayafterclose: 0.1
-delayafterterminate: 0.1
-searcher: searcher_string:
-    0: 'Este script necesita privilegios de administracion'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/as/tests_practicas_AS/tests/./test_practica3.py", line 136, in test_sudo
-    self.assertTrue(False)
-AssertionError: False is not true
+  File "/home/as/tests_practicas_AS/tests/./test_practica3.py", line 100, in test_required_commands
+    self.assertFalse('sudo' in words_in_line,
+AssertionError: True is not false : Line usermod -aG sudo "$nombre" contains the sudo command
 
 ----------------------------------------------------------------------
-Ran 12 tests in 3.801s
+Ran 12 tests in 4.340s
 
-FAILED (failures=3)
+FAILED (failures=2)
