@@ -1,0 +1,17 @@
+Practica 3 (Administración de Sistemas)
+
+Script para la gestión de usuarios (añadir (-a) y eliminar (-s)): 
+Para este script hemos decidido agruparlo en 3 funciones para poder llevar a cabo las especificaciones del enunciado.
+
+En la primera función, comprobamos si el usuario que pretende ejecutar el script tiene permisos de administrador mediante el comando "$(id -u)" el cual nos devuelve el UID del proceso real 
+y en caso de que no devuelva 0(administrador) termina la ejecución del script mostrando por la salida estándar un mensaje que le informa al usuario.
+En la segunda parte del script, comprobamos si el usuario que pretende ejecutarlo lo hace correctamente, es decir, que lanza el script con el número de parametros correctos, que es 2 (el archivo de texto y la función).
+En caso de que la variable de entorno $# sea diferente a 2, el script terminará su ejecución, devolviendo un mensaje de error en el que se le comunica al usuario que el numero de parametros es el incorrecto. En el caso 
+de la función seleccionada por el usuario, se comprueba también que es una opción válida, devolviendo un mensaje de error en caso de que no sea una de las opciones mencionadas anteriormente y acabando la terminación.
+Posteriormente, se implenta la función para eliminar los usuarios. En primer lugar, creamos el directorio donde vamos a almacenar los .tar generados, asegurandonos que se hace de manera correcta con la opción -p. 
+Después vamos leyendo el archivo que nos pasa el usaurio, interesandonos unicamente en el primer elemento de cada fila, ya que es donde se almacena el nombre del usuario a eliminar. Posteriormente comprobamos si
+el usuario existe, almacenando toda la información correspondiente en un tar para despues eliminar el usuario. En caso de que no exista el usuario, nos aseguramos de todas maneras que el tar se elimina.
+Por último esta la función de añadir usuarios, que igualmente vamos leyendo el archivo que nos pasan y comprobamos los casos incorrectos posibles, como el caso en el que algún parametro este vacio o el usuario ya exista.
+para posteriormente crear el usuario solicitado.
+
+En el cuerpo del script, llamamos a las funciones usuario y el la función que se requiera entre añadir y eliminar.
