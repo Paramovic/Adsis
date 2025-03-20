@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #845107, Tomas, Daniel, M, 3, B
 #875325, Martinez, Victor, M, 3, B
 
