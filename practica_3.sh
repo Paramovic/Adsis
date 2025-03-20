@@ -37,16 +37,8 @@ function eliminarUsuario {
 	    then
 	        tar -cf /extra/backup/$nombre.tar "$dirHome" >/dev/null 2>&1
 	    fi
-
-	# En primer lugar guardamos el directorio home del usuario que se quiere eliminar, que se
-	# encuentra en el fichero /etc/passwd, siendo el sexto parametro de la línea, separados
-	# por :. Es por eso que utilizamos cut -d: -f6. Después intentamos crear un tar.gz donde 
-	# vamos a comprimir el directorio home del usuario $i. Redireccionamos la salida de error
-	# a la salida estandar, ya que la redireccionamos a /dev/null, para que de esta manera 
-	# no se muestre ningún mensaje.
-	    estado=$?   # Guardamos el estado que ha devuelto el comando tar, para saber si ha 
-		    # podido crear correctamente el tar en cuyo caso devolvera 0 o si por lo 
-	      # contrario no ha podido crearlo y devuelve 1 o 2 según el manual de tar de ubuntu.
+     
+	    estado=$?
 	    if [ $estado -eq 0 ]  # en caso de que lo haya podido crear,
 	    then
 	        userdel -r "$nombre" >/dev/null 2>&1  # borramos el usuario $i
@@ -65,22 +57,6 @@ function anadirUsuario {
 	    echo "Campo invalido"  # contener nada y terminamos la ejecución.
 	    exit 1
 	fi
-	# Obtenemos el uid registrado con awk que permite procesar el archivo /etc/passwd y 
-	# obtener la tercera columna, que es en la que se almacena el uid, luego con sort -n
-	# ordenamos de forma numerica y con tail -n 1 obtenemos el último valor (el mas alto).
-	#uid=$(awk -F: '$3 >=  /etc/passwd | sort -n | tail -n 1)
-
-	#if [ $uid -lt 1815 ]
-	#then    #Si el uid mas alto registrado es menor a 1815, se le asigna el valor 1815
-	#    uid=$((1815))
-	#else   #Si no, se le suma 1 al uid  mas alto registrado ya que no se puede repetir un uid
-	#    uid=$(($uid + 1))
-	#fi
-
-
-	# Se crea el usuario, -m crea el directorio home y copia el directorio /etc/skel al
-	# directorio home del usuario sin tener que añadir -k.
-	# -u asigna el uid al usuario, -U crea un grupo con el mismo nombre que el usuario.
 
 	if id "$nombre" &>/dev/null
 	then     # Si el usuario ya existe: (useradd devuelve 9 cuando el usuario ya existe)
