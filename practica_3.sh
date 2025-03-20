@@ -10,23 +10,21 @@ function usuario {
     fi
 }
 
-function parametros {
-    if [ "$#" -ne 2 ]; then
-	echo "Numero incorrecto de parametros"
-	exit 1
-    fi
-    if [[ "$1" != "-a" && "$1" != "-s" ]] 
-    then 	
-	echo -e "Opcion invalida" >&2   
-	exit 1
-    fi
-}
+if [ $# -ne 2 ]; then
+    echo "Numero incorrecto de parametros"
+    exit 1
+fi
+
+if [[ "$1" != "-a" && "$1" != "-s" ]]; then
+    echo -e "Opcion invalida" >&2
+    exit 1
+fi
 
 function eliminarUsuario {
     mkdir -p /extra/backup
 
-    while IFS=, read -r nombre _ _ 
-    do     
+    while IFS=, read -r nombre _ _
+    do
 	if id "$nombre" &>/dev/null
 	then
 	    dirHome=$(eval echo ~$nombre)
@@ -34,13 +32,13 @@ function eliminarUsuario {
 	    then
 	        tar -cf /extra/backup/$nombre.tar "$dirHome" >/dev/null 2>&1
 	    fi
-	    estado=$?   
-	    if [ $estado -eq 0 ]  
+	    estado=$?
+	    if [ $estado -eq 0 ]
 	    then
 	        userdel -r "$nombre" >/dev/null 2>&1  
 	    else  
 	        rm -f /extra/backup/$nombre.tar  
-	    fi		    
+	    fi
 	fi
     done < "$1"
 }
@@ -73,7 +71,6 @@ function anadirUsuario {
 }
 
 usuario
-parametros "$1" "$2"
 
 if [ "$1" = "-s" ]
 then
