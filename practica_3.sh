@@ -27,7 +27,7 @@ function eliminarUsuario {
     do
 	if id "$nombre" &>/dev/null
 	then
-	    dirHome=$(eval echo ~$nombre)
+	    dirHome=$(grep $i /etc/passwd | cut -d: -f6)
 	    if [ -d "$dirHome" ]
 	    then
 	        tar -cf /extra/backup/$nombre.tar "$dirHome" >/dev/null 2>&1
