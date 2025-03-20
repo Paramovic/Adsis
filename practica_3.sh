@@ -23,7 +23,7 @@ fi
 function eliminarUsuario {
     mkdir -p /extra/backup
 
-    while IFS=, read -r nombre _ _
+    for nombre in $(cut -d ',' -f1 $1)
     do
 	if id "$nombre" &>/dev/null
 	then
