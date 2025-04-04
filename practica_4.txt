@@ -1,0 +1,35 @@
+Práctica 4 (Administración de Sistemas) 
+845107, Toma, Daniel, M, 3, B
+875325, Martinez, Victor, M, 3, B
+
+En primer lugar, para la configuración de las máquinas hemos creado tres clones de la misma máquina que de la práctica 3, de las cuales una 
+actuará como host de las otras dos. Después, hemos instalado sudo y git como en las prácticas anteriores, añadiendo también openssh-server 
+para poder configurar el ssh más adelante. Para que el usuario as pueda utilizar sudo sin contraseña, hemos editado el archivo /etc/sudoers,
+añadiendo debajo de la línea de root en user privilege specification, “as   ALL=(ALL:ALL)  NOPASSWD : ALL”. Después, hay que modificar las
+direcciones de los adaptadores de red que hemos puesto en cada máquina. Para ello con "ip a", no hemos fijado en el nombre que tiene dentro
+de la máquina y hemos añadido en el archivo /etc/network/interfaces lo siguiente: (Este es el caso de debian-1)
+
+auto enp0s8
+iface enp0s8 inet static
+    address 192.168.56.11
+    netmask 255.255.255.0
+
+En las otras dos maquinas hicimos lo mismo, pero cambiando la dirección, siendo 192.168.56.12 en debian-2 y 192.168.56.10 en el host.
+Después de haber introducido esto, reiniciamos las conexiones del sistema para que detectara el cambio de dirección IP. Esto lo hicimos con: 
+sudo systemctl restart networking. 
+
+A continuación configuramos las máquinas para que el host no pueda conectarse y que solo nos podamos conectar con claves de tipo 
+privada/pública. Para ello, hicimos “sudo nano /etc/ssh/sshd_config”. Dentro del fichero, descomentamos la línea PermitRootLogin 
+prohibit-password y la modificamos sustituyendo la parte de “prohibit-password” por “no”. También descomentamos la línea de 
+AuthorizedKeysFile y quitamos el segundo .ssh, debido a que ya no está mantenida y por último también descomentamos la línea de 
+PasswordAutthentication y poniéndola a no en vez de a yes que es lo que estaba. Con estos tres cambios, el ssh se puede realizar sin pedir 
+ninguna contraseña. 
+
+Posteriormente, hemos creado claves públicas para las maquinas de debian-1 y debian-2. Para ello hemos utilizado el siguiente comando: 
+“ssh-keygen -t ed25519 -C “debian-1” ” en caso de debian-2. De esta manera, generamos una clave que permita conectar con debian-1. 
+Hemos puesto el -t para especificar el tipo de cifrado; que es ed25519 y con -C lo que hacemos es especificar un comentario, que es debian-1, 
+qué es el nombre por el que reconocemos la máquina. Estan creadas las claves, pero falta por pasarle la información correspondiente a 
+debiam-1 para que pueda establecer el ssh con debian-2 y adaptar parte de la información en debian-2. En debian-2, para que reconozca la
+clave creada como una clave váñida, tenemos que hacer “mv id_ed25519.pub authorized_keys” con lo que movemos la clave pública al archivo 
+authorized_keys. También hay que pasar la clave privada a debian-1. Para ello hemos modificado el archivo /etc/hosts, poniendo la ip de 
+debian-1 debajo de la dirección del usuario as-base y confirmando que se ha guardado correctamente mediante ping debian-1.
