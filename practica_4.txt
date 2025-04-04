@@ -33,3 +33,37 @@ debiam-1 para que pueda establecer el ssh con debian-2 y adaptar parte de la inf
 clave creada como una clave váñida, tenemos que hacer “mv id_ed25519.pub authorized_keys” con lo que movemos la clave pública al archivo 
 authorized_keys. También hay que pasar la clave privada a debian-1. Para ello hemos modificado el archivo /etc/hosts, poniendo la ip de 
 debian-1 debajo de la dirección del usuario as-base y confirmando que se ha guardado correctamente mediante ping debian-1.
+
+Posteriormente le pasamos la calve privada a debian-1 mediante los comandos: “nc -lvnp 9000 > id_as_ed25519” en debian-1, 
+“nc debian-1 9000 < id_ed25519” en debian-2. De esta manera, debian-1 tiene la clave privada de debian-2 en id_as_ed25519. Después, 
+reiniciamos el ssh y establecemos para que debian-2 tenga ssh activo constantemente con los siguiente comandos: 
+“sudo systemctl restart sshd”, “systemctl status ssh” (miramos si esta activo el ssh) y “sudo systemctl enable ssh”.
+
+Ahora en debian-1 hacemos le damos permisos de lectura y escritura  con “chmod 600 id_as_ed25519” y 
+con “ssh -i /home/as/.ssh/id_as_ed25519 debian-2” nos conectamos con debian-2.
+
+Volvemos a repetir lo mismo pero a la inver, ahora tenemos que generar las claves con debian-1 y mandarselas a debian-2.
+Una vez hecho esto, pasamos a la maquina host. En ella en el archivo /etc/hosts, hemos puesto las direcciones de debian-1 y de debian-2, 
+hemos vuelto a generar las claves, pero esta vez le hemos pasado la clave publica a ambas maquinas y las hemos añadido en el archivo 
+authorized_keys, para que de esta manera, tambieén admitan al host como dirección valida. Lo único que falta por hacer es crear un archivo 
+en el host que sea id_as_ed25519, que sea una copia de id_ed25519, que es el archivo donde se encuentra la clave privada. 
+
+Y haciendo “ssh -i /home/as/.ssh/id_ed25519 as@192.168.56.11”, nos conectamos a debian-1 y con “ssh -i /home/as/.ssh/id_ed25519 as@192.168.56.12” 
+nos conectamos a debian-2.
+
+Por último, hemos creado un script basándonos en el de la práctica anterior. 
+En este, primero comprobamos si nos pasan los tres argumentos (usuario, contraseña y nombre completo del usuario) y en caso contrario, 
+salimos de la ejecución del script. 
+
+if [[ "$#" -ne 3 ]]; then
+                    exit 1
+fi
+
+
+A continuación realizamos un bucle, en el que mientras nos lleguen direcciones ip, buscamos dicha dirección ip y extraemos su nombre. 
+Después comprobamos si dicha máquina está conectada evitando que el resultado de este salga por la salida estándar.  
+En caso de que el ping devuelva 0, es decir, que la máquina sí que está conectada; utilizamos ssh para conectarnos a la máquina remota 
+utilizando la clave privada que se encuentre en "$HOME/.ssh/id_as_ed25519" y ejecutamos el script de la práctica 3 pasándole como 
+argumentos la opción [-s/-u] y el fichero de usuarios ("/ruta/al/path/practica_3.sh "$1" "$2"") .
+
+En caso de que el ping no sea correcto, escribimos un mensaje de error en la salida estándar.
