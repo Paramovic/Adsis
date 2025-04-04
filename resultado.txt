@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/as/tests_practicas_AS/tests/./test_practica4.py", line 7, in <module>
+    from pexpect import pxssh
+ModuleNotFoundError: No module named 'pexpect'
